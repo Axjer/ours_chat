@@ -116,7 +116,7 @@ const chatData = {
 
 let activeChatId = null;
 
-const socket = io("");
+const socket = io("https://ours-chat.onrender.com/");
 // 從 URL 取得使用者名稱
 const urlParams = new URLSearchParams(window.location.search);
 const urlUsername = urlParams.get("username");
