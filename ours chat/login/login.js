@@ -4,12 +4,6 @@ function joinChat() {
     alert("請輸入使用者名稱來登入。");
     return;
   }
-
-  // Logic for socket integration
-  if (typeof socket !== "undefined") {
-    socket.emit("join", { username: username });
-  }
-
   console.log(`Joining Ours Chat as: ${username}`);
 
   const btn = document.querySelector("button");
