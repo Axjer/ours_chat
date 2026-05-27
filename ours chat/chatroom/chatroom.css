@@ -1,0 +1,60 @@
+.glass-panel {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.message-in {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+body {
+  transition: background-image 0.5s ease-in-out;
+}
+
+/* 為了淺色/白色背景所設計的文字顏色切換，保留透明度 */
+body.light-theme .text-white {
+  color: #1a1b1f !important;
+}
+body.light-theme .text-white\/80 {
+  color: rgba(26, 27, 31, 0.8) !important;
+}
+body.light-theme .text-white\/60 {
+  color: rgba(26, 27, 31, 0.6) !important;
+}
+body.light-theme .text-white\/50 {
+  color: rgba(26, 27, 31, 0.5) !important;
+}
+body.light-theme .text-white\/40 {
+  color: rgba(26, 27, 31, 0.4) !important;
+}
+body.light-theme input::placeholder {
+  color: rgba(26, 27, 31, 0.5) !important;
+}
+body.light-theme .border-white\/50 {
+  border-color: rgba(26, 27, 31, 0.5) !important;
+}
+body.light-theme .bg-primary.text-white,
+body.light-theme .bg-blue-500.text-white {
+  color: #ffffff !important;
+} /* 主按鈕文字保持白色 */
+
+/* 左側動態按鈕透明度反轉 (針對淺色背景) */
+body.light-theme .bg-white\/20 {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+}
+body.light-theme .border-white\/20 {
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+body.light-theme .hover\:bg-white\/10:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+body.light-theme .hover\:text-white:hover {
+  color: #1a1b1f !important;
+}
+body.light-theme .border-transparent {
+  border-color: transparent !important;
+}

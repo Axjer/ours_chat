@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ChatApp Desktop</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              tertiary: "#ba0034",
+              "inverse-surface": "#2f3034",
+              "on-surface": "#1a1b1f",
+              surface: "#faf9fe",
+              "surface-container-highest": "#e3e2e7",
+              "surface-container-high": "#e9e7ed",
+              "on-secondary-fixed": "#0c006a",
+              primary: "#0058bc",
+              "on-error-container": "#93000a",
+              "on-secondary": "#ffffff",
+              "surface-tint": "#005bc1",
+              "secondary-fixed": "#e2dfff",
+              "on-tertiary": "#ffffff",
+              "on-tertiary-fixed": "#40000c",
+              error: "#ba1a1a",
+              "surface-variant": "#e3e2e7",
+              "on-surface-variant": "#414755",
+              "inverse-on-surface": "#f1f0f5",
+              secondary: "#4c4aca",
+              "tertiary-fixed": "#ffdada",
+              "tertiary-fixed-dim": "#ffb3b5",
+              "on-primary-container": "#fefcff",
+              "surface-dim": "#dad9df",
+              "on-secondary-container": "#fffbff",
+              "on-primary-fixed": "#001a41",
+              "secondary-fixed-dim": "#c2c1ff",
+              "error-container": "#ffdad6",
+              "surface-container-low": "#f4f3f8",
+              "surface-bright": "#faf9fe",
+              "primary-container": "#0070eb",
+              outline: "#717786",
+              "on-primary": "#ffffff",
+              "surface-container": "#eeedf3",
+              "on-primary-fixed-variant": "#004493",
+              "on-secondary-fixed-variant": "#3631b4",
+              "outline-variant": "#c1c6d7",
+              "on-background": "#1a1b1f",
+              "inverse-primary": "#adc6ff",
+              "primary-fixed": "#d8e2ff",
+              "on-tertiary-fixed-variant": "#920027",
+              "on-error": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "secondary-container": "#6664e4",
+              "tertiary-container": "#e51245",
+              "primary-fixed-dim": "#adc6ff",
+              background: "#faf9fe",
+              "on-tertiary-container": "#fffbff",
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+            spacing: {
+              margin: "20px",
+              sm: "8px",
+              lg: "24px",
+              xs: "4px",
+              md: "16px",
+              xl: "32px",
+              gutter: "16px",
+            },
+            fontFamily: {
+              subheadline: ["Inter"],
+              body: ["Inter"],
+              display: ["Inter"],
+              "title-2": ["Inter"],
+              callout: ["Inter"],
+              caption: ["Inter"],
+              "title-1": ["Inter"],
+              headline: ["Inter"],
+              footnote: ["Inter"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="chatroom.css" />
+  </head>
+  <body
+    class="font-body text-on-surface h-screen bg-fixed bg-cover bg-center overflow-hidden flex p-6 gap-6"
+    style="background-image: linear-gradient(135deg, #0058bc 0%, #e51245 100%)"
+  >
+    <aside
+      class="flex flex-col py-6 glass-panel rounded-[24px] w-20 items-center shadow-[0_4px_30px_rgba(0,0,0,0.1)] shrink-0 h-full"
+    >
+      <div class="mb-10">
+        <div class="flex items-center justify-center w-12 h-12">
+          <span
+            class="text-[32px] font-semibold text-[#5c56f5] select-none tracking-normal"
+            style="font-family: Arial, Helvetica, sans-serif"
+          >
+            OC
+          </span>
+        </div>
+      </div>
+      <nav class="flex flex-col gap-6 flex-grow">
+        <button id="btn-friends" onclick="switchTab('friends')" title="好友">
+          <span class="material-symbols-outlined" data-icon="person"
+            >person</span
+          >
+        </button>
+        <button id="btn-groups" onclick="switchTab('groups')" title="群組">
+          <span class="material-symbols-outlined" data-icon="group">group</span>
+        </button>
+        <button
+          id="btn-profile"
+          onclick="switchTab('profile')"
+          title="個人檔案"
+        >
+          <span class="material-symbols-outlined" data-icon="account_circle"
+            >account_circle</span
+          >
+        </button>
+        <button id="btn-settings" onclick="switchTab('settings')" title="設定">
+          <span class="material-symbols-outlined" data-icon="settings"
+            >settings</span
+          >
+        </button>
+        <div class="mt-auto pb-4 flex justify-center group relative">
+          <div
+            id="server-status-dot"
+            class="w-3 h-3 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]"
+          ></div>
+          <div
+            class="absolute left-14 top-1/2 -translate-y-1/2 bg-black/80 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-50"
+          >
+            伺服器未連線
+          </div>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="flex-grow flex h-full gap-6 overflow-hidden">
+      <section
+        class="w-80 flex flex-col glass-panel rounded-[24px] overflow-hidden relative"
+      >
+        <div id="panel-friends" class="flex flex-col h-full w-full">
+          <div class="p-5 border-b border-white/20">
+            <div class="flex items-center justify-between mb-4">
+              <h1 class="font-title-2 text-title-2 text-white">好友</h1>
+              <button
+                class="flex items-center gap-1 px-3 py-1.5 bg-white/30 hover:bg-white/40 rounded-full text-white text-caption transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined text-sm"
+                  data-icon="person_add"
+                  >person_add</span
+                >
+                <span>新增好友</span>
+              </button>
+            </div>
+            <div class="relative group">
+              <span
+                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-lg"
+                >search</span
+              >
+              <input
+                class="w-full bg-white/10 border-none rounded-xl py-2 pl-10 pr-4 text-white placeholder-white/50 focus:ring-2 focus:ring-white/30 text-footnote"
+                placeholder="搜尋聯絡人..."
+                type="text"
+              />
+            </div>
+          </div>
+          <div class="flex-grow overflow-y-auto scrollbar-hide">
+            <div class="p-2 space-y-1">
+              <div id="friend-list-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="panel-groups" class="hidden flex-col h-full w-full">
+          <div class="p-5 border-b border-white/20">
+            <div class="flex items-center justify-between mb-4">
+              <h1 class="font-title-2 text-title-2 text-white">群組</h1>
+              <button
+                class="flex items-center gap-1 px-3 py-1.5 bg-white/30 hover:bg-white/40 rounded-full text-white text-caption transition-colors"
+              >
+                <span class="material-symbols-outlined text-sm">group_add</span>
+                <span>新增群組</span>
+              </button>
+            </div>
+            <div class="relative group">
+              <span
+                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-lg"
+                >search</span
+              >
+              <input
+                class="w-full bg-white/10 border-none rounded-xl py-2 pl-10 pr-4 text-white placeholder-white/50 focus:ring-2 focus:ring-white/30 text-footnote"
+                placeholder="搜尋群組..."
+                type="text"
+              />
+            </div>
+          </div>
+          <div class="flex-grow overflow-y-auto scrollbar-hide">
+            <div class="p-2 space-y-1">
+              <div id="group-list-container"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="panel-profile" class="hidden flex-col h-full w-full">
+          <div class="p-5 border-b border-white/20">
+            <h1 class="font-title-2 text-title-2 text-white">個人檔案</h1>
+          </div>
+          <div
+            class="p-5 flex-grow flex flex-col items-center gap-6 overflow-y-auto scrollbar-hide"
+          >
+            <div class="relative">
+              <img
+                class="w-24 h-24 rounded-full object-cover border-4 border-white/30"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZoaxHFC_m5sikvR7wNC-YV7pLiNd_C0X1bOKap_fa-XlqTAr3S9NlEbOVTXgvTd5ICqefUqVpkpz5D8cKxisFUeTYB-u9iHXcSEDrpk34DtkjErxWyn0Qn33fcJGbc2SZIvDuN11F_pxhRo12AoPyjzlBPm__eJ1P8eE9x76Z1nd3VZpMO-7YQYW71SFqcp9c_JUfXIRHGUctVQh1Vqn54kiRtOFNOgRuthdgO8UkAVYiXQyWtsn_HqxuwkBSjvPGlIOz3_sPIbCh"
+                alt="Profile"
+              />
+            </div>
+            <div class="w-full">
+              <label class="text-white/80 text-sm mb-2 block">顯示名稱</label>
+              <input
+                id="profile-name-input"
+                type="text"
+                value="Alex Rivera"
+                class="w-full bg-white/10 border-none rounded-xl py-3 px-4 text-white placeholder-white/50 focus:ring-2 focus:ring-white/30 text-body"
+              />
+            </div>
+            <button
+              onclick="saveProfile()"
+              class="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all shadow-lg active:scale-95"
+            >
+              儲存名稱
+            </button>
+            <p
+              id="save-msg"
+              class="text-green-300 text-sm opacity-0 transition-opacity font-medium"
+            >
+              名稱已更新！
+            </p>
+          </div>
+        </div>
+
+        <div id="panel-settings" class="hidden flex-col h-full w-full">
+          <div class="p-5 border-b border-white/20">
+            <h1 class="font-title-2 text-title-2 text-white">設定</h1>
+          </div>
+          <div class="p-5 flex-grow space-y-6 overflow-y-auto scrollbar-hide">
+            <div>
+              <h3 class="text-white/80 text-sm mb-3 font-semibold">
+                聊天室背景顏色
+              </h3>
+              <div class="grid grid-cols-4 gap-2">
+                <button
+                  onclick="
+                    changeBackground(
+                      'linear-gradient(135deg, #0f172a 0%, #000000 100%)',
+                      false,
+                    )
+                  "
+                  class="h-12 rounded-xl bg-gradient-to-br from-slate-900 to-black border-2 border-white/20 hover:border-white transition-all shadow-md active:scale-95"
+                  title="深邃黑"
+                ></button>
+                <button
+                  onclick="
+                    changeBackground(
+                      'linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%)',
+                      true,
+                    )
+                  "
+                  class="h-12 rounded-xl bg-gradient-to-br from-white to-slate-200 border-2 border-white/20 hover:border-white transition-all shadow-md active:scale-95"
+                  title="簡約白"
+                ></button>
+                <button
+                  onclick="
+                    changeBackground(
+                      'linear-gradient(135deg, #0058bc 0%, #e51245 100%)',
+                      false,
+                    )
+                  "
+                  class="h-12 rounded-xl bg-gradient-to-br from-[#0058bc] to-[#e51245] border-2 border-white/20 hover:border-white transition-all shadow-md active:scale-95"
+                  title="預設紅藍"
+                ></button>
+                <button
+                  onclick="
+                    changeBackground(
+                      'linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%)',
+                      false,
+                    )
+                  "
+                  class="h-12 rounded-xl bg-gradient-to-br from-blue-900 to-slate-900 border-2 border-white/20 hover:border-white transition-all shadow-md active:scale-95"
+                  title="深海藍"
+                ></button>
+                <button
+                  onclick="
+                    changeBackground(
+                      'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+                      false,
+                    )
+                  "
+                  class="h-12 rounded-xl bg-gradient-to-br from-emerald-600 to-emerald-500 border-2 border-white/20 hover:border-white transition-all shadow-md active:scale-95"
+                  title="薄荷綠"
+                ></button>
+                <button
+                  onclick="
+                    changeBackground(
+                      'linear-gradient(135deg, #7c3aed 0%, #c026d3 100%)',
+                      false,
+                    )
+                  "
+                  class="h-12 rounded-xl bg-gradient-to-br from-violet-600 to-fuchsia-600 border-2 border-white/20 hover:border-white transition-all shadow-md active:scale-95"
+                  title="霓虹紫"
+                ></button>
+                <button
+                  onclick="
+                    changeBackground(
+                      'linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)',
+                      false,
+                    )
+                  "
+                  class="h-12 rounded-xl bg-gradient-to-br from-amber-500 to-red-500 border-2 border-white/20 hover:border-white transition-all shadow-md active:scale-95"
+                  title="夕陽橘"
+                ></button>
+                <button
+                  onclick="
+                    changeBackground(
+                      'linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%)',
+                      false,
+                    )
+                  "
+                  class="h-12 rounded-xl bg-gradient-to-br from-sky-500 to-blue-500 border-2 border-white/20 hover:border-white transition-all shadow-md active:scale-95"
+                  title="天空藍"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="empty-chat-view"
+        class="flex-grow flex flex-col items-center justify-center glass-panel rounded-[24px] overflow-hidden"
+      >
+        <div class="flex flex-col items-center text-center px-4">
+          <div
+            class="w-24 h-24 rounded-full border-2 border-white/50 flex items-center justify-center mb-6"
+          >
+            <span
+              class="material-symbols-outlined text-5xl text-white/80"
+              style="
+                font-variation-settings:
+                  &quot;FILL&quot; 0,
+                  &quot;wght&quot; 200;
+              "
+              >send</span
+            >
+          </div>
+          <h2 class="text-2xl font-semibold text-white mb-2 tracking-wide">
+            你的訊息
+          </h2>
+          <p class="text-white/60 mb-8 text-sm">
+            私下傳送相片和訊息給朋友或群組。
+          </p>
+          <button
+            class="bg-[#5c56f5] hover:bg-[#4b45d6] text-white font-medium py-2 px-6 rounded-lg transition-colors shadow-lg shadow-blue-500/20 active:scale-95"
+          >
+            發送訊息
+          </button>
+        </div>
+      </section>
+
+      <section
+        id="active-chat-view"
+        class="hidden flex-grow flex-col glass-panel rounded-[24px] overflow-hidden"
+      >
+        <header
+          class="flex justify-between items-center px-6 py-4 border-b border-white/20"
+        >
+          <div class="flex items-center gap-4">
+            <div class="relative" id="chat-header-avatar-container">
+              <img
+                id="chat-header-avatar"
+                class="w-10 h-10 rounded-full object-cover"
+                src=""
+              />
+              <div
+                id="chat-header-status-dot"
+                class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 border border-white/30 rounded-full"
+              ></div>
+            </div>
+            <div>
+              <h2
+                id="chat-header-name"
+                class="font-headline text-headline text-white leading-tight"
+              ></h2>
+              <p
+                id="chat-header-status"
+                class="text-caption text-green-400 flex items-center gap-1"
+              ></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 text-white/80">
+            <button
+              class="p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <span class="material-symbols-outlined" data-icon="videocam"
+                >videocam</span
+              >
+            </button>
+            <button
+              class="p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <span class="material-symbols-outlined" data-icon="call"
+                >call</span
+              >
+            </button>
+            <div class="w-px h-6 bg-white/20 mx-1"></div>
+            <button
+              class="p-2 hover:bg-white/10 rounded-full transition-colors"
+            >
+              <span class="material-symbols-outlined" data-icon="more_vert"
+                >more_vert</span
+              >
+            </button>
+          </div>
+        </header>
+
+        <div
+          id="chat-messages"
+          class="flex-grow p-6 overflow-y-auto scrollbar-hide flex flex-col gap-6"
+        ></div>
+
+        <footer class="p-6">
+          <div
+            class="flex items-center gap-4 bg-white/10 border border-white/20 rounded-[20px] p-2 pl-4"
+          >
+            <button class="text-white/60 hover:text-white transition-colors">
+              <span class="material-symbols-outlined" data-icon="mood"
+                >mood</span
+              >
+            </button>
+            <button class="text-white/60 hover:text-white transition-colors">
+              <span class="material-symbols-outlined" data-icon="attach_file"
+                >attach_file</span
+              >
+            </button>
+            <input
+              id="chat-input"
+              class="flex-grow bg-transparent border-none text-white placeholder-white/40 focus:ring-0 text-body"
+              placeholder="輸入訊息..."
+              type="text"
+              onkeypress="handleKeyPress(event)"
+            />
+            <button
+              onclick="sendMessage()"
+              class="w-10 h-10 flex items-center justify-center bg-blue-500 hover:bg-blue-600 rounded-xl text-white transition-all active:scale-95 shadow-md"
+            >
+              <span
+                class="material-symbols-outlined"
+                data-icon="send"
+                style="font-variation-settings: &quot;FILL&quot; 1"
+                >send</span
+              >
+            </button>
+          </div>
+        </footer>
+      </section>
+    </main>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="chatroom.js"></script>
+  </body>
+</html>
